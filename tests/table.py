@@ -2,8 +2,6 @@ from enum import Enum
 import numpy as np
 from numpy.linalg import eig
 import time
-import sys
-
 
 def getIndex(letter):
     if letter == 'n':
@@ -29,10 +27,9 @@ def getIndex(letter):
     elif letter == '\n':
         return 11
 
-
 def getLetter(number):
     if number == 0:
-        return 'n'
+        return 'λ'
     elif number == 1:
         return 'n'
     elif number == 2:
@@ -54,20 +51,21 @@ def getLetter(number):
     elif number == 10:
         return '-'
     elif number == 11:
-        return '\n'
-
+        return '\\n'
 
 def defineArray(number, array, tag):
-    if (tag == 'f'):
+    if(tag == 'f'):
         for x in range(0, number):
-            array.append([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+            array.append([0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0])
     else:
         for x in range(0, number):
             array.append(0)
+        
 
 
-f = open(sys.argv[1], "r")
+f = open("out.txt", "r")
 
+line = f.readline()
 totalLetters = 0
 array = []
 marginal = []
@@ -78,6 +76,7 @@ defineArray(12, array, 'f')
 
 array = np.array(array)
 
+
 while True:
     line = f.readline()
 
@@ -85,22 +84,27 @@ while True:
         break
 
     for x in range(0, len(line) - 1):
-        array[getIndex(line[x + 1])][getIndex(line[x])] += 1
+        array[getIndex(line[x+1])][getIndex(line[x])] += 1
         marginal[getIndex(line[x])] += 1
         if x == 0:
             array[getIndex(line[x])][0] += 1
             marginal[0] += 1
 
+
 print(array)
 print(marginal)
 
-for x in range(0, 12):
-    for y in range(0, 12):
-        if (array[y][x] == 0):
+for x in range (0, 12):
+    for y in range(0,12):
+        if(array[y][x] == 0):
             array[y][x] = 0
             continue
         array[y][x] = round((array[y][x] / marginal[x]), 4)
 
-print(array)
+for x in range(0,12):
+    for y in range(0,12):
+        print("P("+str(getLetter(y)) + " | " + str(getLetter(x)) + ") = " + str(array[y][x]))
+
+'''print(array)
 values, vectors = eig(array)
-print(values)
+print(values)'''
