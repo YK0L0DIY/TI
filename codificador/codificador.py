@@ -2,44 +2,43 @@ import sys
 from struct import *
 
 input_file = sys.argv[1]
-maximum_table_size = 4096
 
+# mudar para ser por stdin no futuro :D
 file = open(input_file)
 data = file.read()
 file.close()
 
 dictionary = {
-    'b': 0,
-    'e': 1,
-    'f': 2,
-    'k': 3,
-    'n': 4,
-    'o': 5,
-    'r': 6,
-    'u': 7,
-    'w': 8,
-    '-': 9,
-    '\n': 10,
+    'broken-\n': 0,
+    'on-----\n': 1,
+    'off----\n': 2,
+    'unknown\n': 3,
 }
 
 string = ""
 compressed_data = []
 
-for symbol in data:
-    string_plus_symbol = string + symbol
+word = data[:8]  # le a primeora palavra ex 'unknown\n'
+data = data[8:]  # retira oque leu do input
+
+while word:
+    string_plus_symbol = string + word
+
     if string_plus_symbol in dictionary:
         string = string_plus_symbol
 
     else:
         compressed_data.append(dictionary[string])
 
-        if len(dictionary) <= maximum_table_size:
-            dictionary[string_plus_symbol] = len(dictionary)
-        string = symbol
+        dictionary[string_plus_symbol] = len(dictionary)
+        string = word
+
+    word = data[:8]
+    data = data[8:]
 
 if string in dictionary:
     compressed_data.append(dictionary[string])
 
-for data in compressed_data:
-    print(pack('>H', int(data)), end='')
-    #print(bin(data), end='')
+with open('teste.b', 'wb') as file:
+    for data in compressed_data:
+        file.write(pack('>H', int(data)))
