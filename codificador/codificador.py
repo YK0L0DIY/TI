@@ -22,15 +22,15 @@ word = data[:8]  # le a primeora palavra ex 'unknown\n'
 data = data[8:]  # retira oque leu do input
 
 while word:
-    string_plus_symbol = string + word
+    string_plus_word = string + word
 
-    if string_plus_symbol in dictionary:
-        string = string_plus_symbol
+    if string_plus_word in dictionary:
+        string = string_plus_word
 
     else:
         compressed_data.append(dictionary[string])
 
-        dictionary[string_plus_symbol] = len(dictionary)
+        dictionary[string_plus_word] = len(dictionary)
         string = word
 
     word = data[:8]
@@ -42,3 +42,7 @@ if string in dictionary:
 with open('../descopresor/teste.b', 'wb') as file:
     for data in compressed_data:
         file.write(pack('>H', int(data) << 1))
+
+with open('../descopresor/pos.txt', 'w') as file:
+    for data in compressed_data:
+        file.write(str(data)+'\n')

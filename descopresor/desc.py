@@ -25,15 +25,16 @@ decompressed_data = ""
 string = ""
 next_code = len(dictionary)
 
-for code in compressed_data:
+for current_code in compressed_data:
 
-    if not (code in dictionary):
-        dictionary[code] = string + (string[0])
-    decompressed_data += dictionary[code]
+    if not (current_code in dictionary):
+        dictionary[current_code] = string + (string[:8])
+    decompressed_data += dictionary[current_code]
+
     if not (len(string) == 0):
-        dictionary[next_code] = string + (dictionary[code])
+        dictionary[next_code] = string + (dictionary[current_code][:8])
         next_code += 1
-    string = dictionary[code]
+    string = dictionary[current_code]
 
-print(decompressed_data)
+print(decompressed_data, end='')
 file.close()
