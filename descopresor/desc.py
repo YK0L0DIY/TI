@@ -5,7 +5,6 @@ input_file = sys.argv[1]
 
 # mudar para ser por stdin no futuro :D
 file = open(input_file, 'rb')
-# data = file.read()
 
 dictionary = {
     0: 'broken-\n',
@@ -20,7 +19,7 @@ while True:
     if len(rec) != 2:
         break
     (data,) = unpack('>H', rec)
-    compressed_data.append(data)
+    compressed_data.append(data >> 1)
 
 decompressed_data = ""
 string = ""

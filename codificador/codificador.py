@@ -41,4 +41,4 @@ if string in dictionary:
 
 with open('../descopresor/teste.b', 'wb') as file:
     for data in compressed_data:
-        file.write(pack('>H', int(data)))
+        file.write(pack('>H', int(data) << 1))
