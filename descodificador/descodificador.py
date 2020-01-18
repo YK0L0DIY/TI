@@ -1,17 +1,20 @@
 import sys
-from struct import *
 
 input_file = sys.argv[1]
 
-# mudar para ser por stdin no futuro :D
 file = open(input_file, 'rb')
 
+'''
+Cada palavra gerada pela fonte é tratada como simbolo
+indivisicel, i.e. um átomo.
+'''
 dictionary = {
     0: 'broken-\n',
     1: 'on-----\n',
     2: 'off----\n',
     3: 'unknown\n',
 }
+
 compressed_data = []
 
 while True:
@@ -22,6 +25,8 @@ while True:
     p1 = rec[0]
     p2 = rec[1]
 
+    #a p1 é feito um shift right de 1 bit (bit de redundancia adicionado pelo codificador).
+    #são "adicionados" 8 bits a p1. É feito o or com p2.
     p1 = p1 >> 1
     short = (p1 << 8) ^ p2
     to_unpack = short >> 1
@@ -32,6 +37,9 @@ decompressed_data = ""
 string = ""
 next_code = len(dictionary)
 
+'''
+Implementação do algoritmo LZW baseado nos slides.
+'''
 for current_code in compressed_data:
 
     if not (current_code in dictionary):
@@ -45,6 +53,3 @@ for current_code in compressed_data:
 
 print(decompressed_data, end='')
 file.close()
-
-with open('file.txt', 'w') as file:
-    file.write(decompressed_data)

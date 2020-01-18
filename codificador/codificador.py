@@ -1,13 +1,12 @@
 import sys
 from struct import *
 
-input_file = sys.argv[1]
+data = sys.stdin.readlines()
 
-# mudar para ser por stdin no futuro :D
-file = open(input_file)
-data = file.read()
-file.close()
-
+'''
+Cada palavra gerada pela fonte é tratada como simbolo
+indivisivel, i.e. um átomo.
+'''
 dictionary = {
     'broken-\n': 0,
     'on-----\n': 1,
@@ -18,10 +17,7 @@ dictionary = {
 string = ""
 compressed_data = []
 
-word = data[:8]  # le a primeora palavra ex 'unknown\n'
-data = data[8:]  # retira oque leu do input
-
-while word:
+for word in data:
     string_plus_word = string + word
 
     if string_plus_word in dictionary:
@@ -33,17 +29,19 @@ while word:
         dictionary[string_plus_word] = len(dictionary)
         string = word
 
-    word = data[:8]
-    data = data[8:]
-
 if string in dictionary:
     compressed_data.append(dictionary[string])
 
 with open('../descodificador/codificado.bin', 'wb') as file:
     for data in compressed_data:
+
+        #short = p1p2
         short = pack('>H', int(data) << 1)
         p1 = short[0]
         p2 = short[1]
-        print(short, p1, p2)
-        to_write = ((p1 << 1) << 8) ^ p2
+
+        #p2 ja tem redundancia no ultimo bit. (adicionada na operacao pack << 1)
+        #p1 nao tem, "adicionar" o bit de redundancia e fazer or com p2.
+        p1 = p1 << 1
+        to_write = (p1 << 8) ^ p2
         file.write(pack('>H', int(to_write)))
