@@ -14,20 +14,19 @@ dictionary = {
 }
 compressed_data = []
 
-cont = 0
 while True:
     rec = file.read(2)
     if len(rec) != 2:
         break
 
-    (data,) = unpack('>H', rec)
+    p1 = rec[0]
+    p2 = rec[1]
 
-    if cont % 2 == 0:
-        compressed_data.append(data)
-    else:
-        compressed_data.append(data >> 1)
+    p1 = p1 >> 1
+    short = (p1 << 8) ^ p2
+    to_unpack = short >> 1
 
-    cont += 1
+    compressed_data.append(to_unpack)
 
 decompressed_data = ""
 string = ""
