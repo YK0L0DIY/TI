@@ -39,10 +39,6 @@ while word:
 if string in dictionary:
     compressed_data.append(dictionary[string])
 
-with open('../descopresor/teste.b', 'wb') as file:
+with open('../descodificador/codificado.txt', 'wb') as file:
     for data in compressed_data:
-        file.write(pack('>H', int(data) << 1))
-
-with open('../descopresor/pos.txt', 'w') as file:
-    for data in compressed_data:
-        file.write(str(data)+'\n')
+        file.write(pack('>H', int(data)))

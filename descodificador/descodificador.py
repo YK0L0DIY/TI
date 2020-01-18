@@ -19,7 +19,7 @@ while True:
     if len(rec) != 2:
         break
     (data,) = unpack('>H', rec)
-    compressed_data.append(data >> 1)
+    compressed_data.append(data)
 
 decompressed_data = ""
 string = ""
