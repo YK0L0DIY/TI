@@ -39,6 +39,6 @@ while word:
 if string in dictionary:
     compressed_data.append(dictionary[string])
 
-with open('teste.b', 'wb') as file:
+with open('../descopresor/teste.b', 'wb') as file:
     for data in compressed_data:
         file.write(pack('>H', int(data)))
