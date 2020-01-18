@@ -14,12 +14,20 @@ dictionary = {
 }
 compressed_data = []
 
+cont = 0
 while True:
     rec = file.read(2)
     if len(rec) != 2:
         break
+
     (data,) = unpack('>H', rec)
-    compressed_data.append(data)
+
+    if cont % 2 == 0:
+        compressed_data.append(data)
+    else:
+        compressed_data.append(data >> 1)
+
+    cont += 1
 
 decompressed_data = ""
 string = ""
@@ -38,3 +46,6 @@ for current_code in compressed_data:
 
 print(decompressed_data, end='')
 file.close()
+
+with open('file.txt', 'w') as file:
+    file.write(decompressed_data)

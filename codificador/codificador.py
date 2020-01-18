@@ -39,6 +39,11 @@ while word:
 if string in dictionary:
     compressed_data.append(dictionary[string])
 
-with open('../descodificador/codificado.txt', 'wb') as file:
-    for data in compressed_data:
-        file.write(pack('>H', int(data)))
+with open('../descodificador/codificado.bin', 'wb') as file:
+    for i, data in enumerate(compressed_data):
+        if (i + 1) % 2 == 0:
+            print(int(data) << 1)
+            file.write(pack('>H', int(data) << 1))
+        else:
+            print(int(data))
+            file.write(pack('>H', int(data)))
